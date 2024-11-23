@@ -1,0 +1,45 @@
+name: farm-manager-backend
+
+services:
+  frontend:
+    depends_on:
+      - backend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    networks:
+        - hackathon
+
+  backend:
+    depends_on:
+      - pg
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - '8080:8080'
+    networks:
+        - hackathon
+
+  pg:
+    image: postgres:13-alpine
+    ports:
+      - '5432:5432'
+    environment:
+      - POSTGRES_USER=docker
+      - POSTGRES_PASSWORD=docker
+      - POSTGRES_DB=hackathon
+      - TZ=America/Sao_Paulo
+    volumes:
+      - hackathon:/var/lib/postgresql/data
+    networks:
+      - hackathon
+volumes:
+  hackathon:
+    driver: local
+
+networks:
+  hackathon:
+    driver: bridge
