@@ -18,7 +18,6 @@ export default function App() {
   function handleMatter(id: string) {
     if (id) {
       setAlert(!alert);
-      setTimeout();
     }
   }
   return (
