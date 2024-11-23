@@ -1,5 +1,6 @@
 import { createId, init } from '@paralleldrive/cuid2'
-import { json, pgTable, text, timestamp, unique } from 'drizzle-orm/pg-core'
+import { pgTable, text, timestamp } from 'drizzle-orm/pg-core'
+import { classroom } from './scholar'
 
 const createCode = init({
   length: 6,
@@ -14,6 +15,7 @@ export const user = pgTable('users', {
   email: text('email').notNull(),
   externalId: text('external_id').notNull().unique(),
   code: text('code').notNull().unique().$defaultFn(() => createCode()),
+  classroomId: text('classroom_id').notNull().references(() => classroom.id),
   createdAt: timestamp('created_at', { withTimezone: true })
     .notNull()
     .defaultNow(),

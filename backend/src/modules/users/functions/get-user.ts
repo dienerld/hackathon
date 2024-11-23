@@ -36,7 +36,7 @@ export async function getUser(externalId: string): Promise<UserResponse | null> 
     )
     .execute()
 
-  await new Promise(resolve => setTimeout(resolve, 5_000))
+  await new Promise(resolve => setTimeout(resolve, 1_000))
   if (!userDb)
     return null
 

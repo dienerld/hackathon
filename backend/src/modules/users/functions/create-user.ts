@@ -1,21 +1,20 @@
 import { db, eq, tables } from '~/database'
 
 interface CreateUserRequest {
-  fullName: string
+
   firstName: string
   lastName: string
   email: string
   externalId: string
-  picture?: string
+  classroomId: string
 }
 
 export async function createUser({
-  fullName,
   firstName,
   lastName,
   email,
   externalId,
-  picture,
+  classroomId,
 }: CreateUserRequest) {
   const [userDb] = await db
     .select({ id: tables.user.id })
@@ -30,7 +29,7 @@ export async function createUser({
 
   const [userCreated] = await db
     .insert(tables.user)
-    .values({ fullName, firstName, lastName, email, externalId, picture })
+    .values({ firstName, lastName, email, externalId, classroomId })
     .returning({ id: tables.user.id })
     .execute()
 
