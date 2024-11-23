@@ -19,7 +19,12 @@ export function Header() {
         </a>
 
         <SignedOut>
-          <SignInButton />
+          <Link href="/sign-up" className="text-blue-500">
+            Sign Up
+          </Link>
+          <Link href="/sign-in" className="text-blue-500">
+            Sign In
+          </Link>
         </SignedOut>
         <SignedIn>
           <UserButton />

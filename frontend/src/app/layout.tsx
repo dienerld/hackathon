@@ -18,7 +18,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body
-          className={` dark antialiased bg-background text-foreground flex size-full flex-col items-center justify-center`}
+          className={` dark antialiased bg-background text-foreground min-h-svh flex flex-col`}
         >
           <MainContent header={<Header />}>{children}</MainContent>
         </body>

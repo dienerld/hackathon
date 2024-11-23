@@ -6,10 +6,10 @@ type MainContentProps = PropsWithChildren<{
 
 export function MainContent({ children, header }: MainContentProps) {
   return (
-    <div className="flex size-full flex-col">
-      {header && <div className="flex-1">{header}</div>}
-      <div className="h-max w-full flex-1">
-        <main className="mx-auto size-full max-w-screen-xl p-5">{children}</main>
+    <div className="flex flex-col flex-1">
+      {header && <div className="w-full">{header}</div>}
+      <div className="h-max w-full flex-1 flex">
+        <main className="mx-auto max-w-screen-xl p-5 flex-1">{children}</main>
       </div>
     </div>
   )

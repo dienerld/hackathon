@@ -1,17 +1,8 @@
-import { Button } from '@/components/ui/button'
-import { currentUser } from '@clerk/nextjs/server'
-
-export default async function Home() {
-  const user = await currentUser()
-
+export default function LandingPage() {
   return (
-    <>
-      <h1>Home</h1>
-      <p>
-        {' '}
-        User ID:
-        {user?.fullName}
-      </p>
-    </>
+    <div className="flex flex-col items-center justify-center h-full">
+      <h1>Welcome to Hackathon</h1>
+      <p>This is a landing page.</p>
+    </div>
   )
 }
