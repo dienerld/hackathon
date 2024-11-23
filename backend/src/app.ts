@@ -25,7 +25,7 @@ export const fastifyInstance = fastify()
   .setValidatorCompiler(validatorCompiler)
   .setSerializerCompiler(serializerCompiler)
   .withTypeProvider<ZodTypeProvider>()
-  .register(fastifyCors, { origin: env.CORS })
+  .register(fastifyCors, { origin: '*' })
   .setErrorHandler(parseZodError)
 
 fastifyInstance.register(rootRouter, { prefix: '/' })
