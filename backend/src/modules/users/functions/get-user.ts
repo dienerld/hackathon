@@ -28,7 +28,11 @@ export async function getUser(externalId: string): Promise<UserResponse> {
       createdAt: tables.user.createdAt,
     })
     .from(tables.user)
-    .where(or(eq(tables.user.externalId, externalId), eq(tables.user.id, externalId)))
+    .where(or(
+      eq(tables.user.externalId, externalId),
+      eq(tables.user.id, externalId),
+    ),
+    )
     .execute()
 
   return userResponseSchema.parse(userDb)

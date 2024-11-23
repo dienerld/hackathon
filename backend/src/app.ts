@@ -1,23 +1,23 @@
 import { join } from 'node:path'
+import { env } from '@env'
 import fastifyAutoload, { type AutoloadPluginOptions } from '@fastify/autoload'
-import fastifyCors from '@fastify/cors'
 
+import fastifyCors from '@fastify/cors'
 import fastify, { type FastifyServerOptions } from 'fastify'
+
 import {
-  type ZodTypeProvider,
   jsonSchemaTransform,
   serializerCompiler,
   validatorCompiler,
+  type ZodTypeProvider,
 } from 'fastify-type-provider-zod'
-
-import { env } from '@env'
 import { parseZodError } from '~/utils/parse-zod-error'
 
 import { rootRouter } from './http/routes/root'
 
 export interface AppOptions
   extends FastifyServerOptions,
-    Partial<AutoloadPluginOptions> {}
+  Partial<AutoloadPluginOptions> {}
 // Pass --options via CLI arguments in command to enable these options.
 const options: AppOptions = {}
 

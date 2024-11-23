@@ -1,5 +1,4 @@
-import { eq } from 'drizzle-orm'
-import { db, tables } from '~/database'
+import { db, eq, tables } from '~/database'
 
 interface CreateUserRequest {
   fullName: string

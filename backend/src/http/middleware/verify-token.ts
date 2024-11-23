@@ -2,7 +2,8 @@ import type { FastifyRequest, onRequestHookHandler } from 'fastify'
 import { env } from '~/env'
 
 function verifyVerb(allowedVerb: string | null, requestVerb?: string) {
-  if (!allowedVerb || !requestVerb) return true
+  if (!allowedVerb || !requestVerb)
+    return true
   return allowedVerb === requestVerb
 }
 function isRouteAllowed(_allowedRoute: string, request: FastifyRequest) {
@@ -12,7 +13,7 @@ function isRouteAllowed(_allowedRoute: string, request: FastifyRequest) {
   let allowedRouteVerb: string | null = null
   if (
     ['GET', 'POST', 'PUT', 'DELETE'].includes(
-      allowedRoute.split(' ')[0].toUpperCase()
+      allowedRoute.split(' ')[0].toUpperCase(),
     )
   ) {
     const [_allowedRouteVerb, _allowedRoute] = allowedRoute.split(' ')
@@ -27,13 +28,13 @@ function isRouteAllowed(_allowedRoute: string, request: FastifyRequest) {
     }
 
     return (
-      verifyVerb(allowedRouteVerb, requestVerb) &&
-      currentRoute.startsWith(baseRoute)
+      verifyVerb(allowedRouteVerb, requestVerb)
+      && currentRoute.startsWith(baseRoute)
     ) // Verifica se a rota atual começa com a baseRoute
   }
 
-  const currentRouteWithoutEndSlash =
-    currentRoute.length === 1 ? currentRoute : currentRoute.replace(/\/$/, '')
+  const currentRouteWithoutEndSlash
+    = currentRoute.length === 1 ? currentRoute : currentRoute.replace(/\/$/, '')
 
   // verifica se allowedRoute tem verbo
 
@@ -41,8 +42,8 @@ function isRouteAllowed(_allowedRoute: string, request: FastifyRequest) {
 
   // Para casos em que não é um wildcard
   return (
-    allowedRoute === currentRouteWithoutEndSlash &&
-    verifyVerb(allowedRouteVerb, requestVerb)
+    allowedRoute === currentRouteWithoutEndSlash
+    && verifyVerb(allowedRouteVerb, requestVerb)
   )
 }
 
@@ -71,6 +72,5 @@ export const verifyToken: onRequestHookHandler = async (request, reply) => {
       error: 'Forbidden',
       message: 'Invalid Token',
     })
-    return
   }
 }
