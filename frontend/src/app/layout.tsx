@@ -1,9 +1,7 @@
 import type { Metadata } from 'next'
-import { BreadcrumbApp } from '@/components/Breadcrumb'
 import { Header } from '@/components/Header'
 import { MainContent } from '@/components/MainContent'
 import { Toaster } from '@/components/ui/toaster'
-import { BreadcrumbProvider } from '@/contexts/breadcrumbs/provider'
 import { ClerkProvider } from '@clerk/nextjs'
 import './globals.css'
 
@@ -23,13 +21,10 @@ export default function RootLayout({
         <body
           className="antialiased  min-h-svh flex flex-col"
         >
-          {/* <BreadcrumbProvider> */}
           <MainContent header={<Header />}>
-            <BreadcrumbApp />
             {children}
           </MainContent>
           <Toaster />
-          {/* </BreadcrumbProvider> */}
         </body>
       </html>
     </ClerkProvider>
