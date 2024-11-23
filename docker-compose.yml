@@ -1,4 +1,4 @@
-name: farm-manager-backend
+name: hackathon
 
 services:
   frontend:

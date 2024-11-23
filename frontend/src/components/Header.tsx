@@ -1,3 +1,4 @@
+import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/nextjs'
 import Link from 'next/link'
 
 export function Header() {
@@ -17,6 +18,13 @@ export function Header() {
           Contact
         </a>
       </div>
+
+      <SignedOut>
+        <SignInButton />
+      </SignedOut>
+      <SignedIn>
+        <UserButton />
+      </SignedIn>
     </header>
   )
 }

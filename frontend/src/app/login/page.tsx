@@ -1,9 +1,12 @@
-import { MainContent } from '@/components/MainContent'
+'use client'
+import { Button } from '@/components/ui/button'
 
 export default function LoginPage() {
+  async function handleLogin() {
+    console.log('')
+  }
+
   return (
-    <MainContent>
-      <h1>Login</h1>
-    </MainContent>
+    <Button onClick={() => handleLogin()}>Login</Button>
   )
 }

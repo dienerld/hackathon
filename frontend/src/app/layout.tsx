@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Header } from '@/components/Header'
 import { MainContent } from '@/components/MainContent'
+import { ClerkProvider } from '@clerk/nextjs'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -14,12 +15,14 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={` dark antialiased bg-background text-foreground flex size-full flex-col items-center justify-center`}
-      >
-        <MainContent header={<Header />}>{children}</MainContent>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <body
+          className={` dark antialiased bg-background text-foreground flex size-full flex-col items-center justify-center`}
+        >
+          <MainContent header={<Header />}>{children}</MainContent>
+        </body>
+      </html>
+    </ClerkProvider>
   )
 }
