@@ -7,6 +7,9 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+    volumes:
+      - ./frontend:/home/node/app
+      - ./frontend/node_modules:/home/node/app/node_modules
     ports:
       - '3000:3000'
     networks:
@@ -18,6 +21,9 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
+    volumes:
+      - ./backend:/home/node/app
+      - ./backend/node_modules:/home/node/app/node_modules
     ports:
       - '8080:8080'
     networks:
