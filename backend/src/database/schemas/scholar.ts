@@ -1,22 +1,6 @@
 import { createId } from '@paralleldrive/cuid2'
-import { json, pgTable, text, timestamp, unique } from 'drizzle-orm/pg-core'
-
-export const user = pgTable('users', {
-  id: text('id')
-    .primaryKey()
-    .$defaultFn(() => createId()),
-  fullName: text('full_name').notNull(),
-  firstName: text('first_name').notNull(),
-  lastName: text('last_name').notNull(),
-  email: text('email').notNull(),
-  externalId: text('external_id').notNull().unique(),
-  createdAt: timestamp('created_at', { withTimezone: true })
-    .notNull()
-    .defaultNow(),
-  updatedAt: timestamp('updated_at', { withTimezone: true })
-    .notNull()
-    .defaultNow(),
-})
+import { json, pgEnum, pgTable, text, timestamp } from 'drizzle-orm/pg-core'
+import { user } from './user'
 
 export const classroom = pgTable('classrooms', {
   id: text('id')
@@ -44,23 +28,52 @@ export const matter = pgTable('matters', {
     .defaultNow(),
 })
 
-export const question = pgTable('questions', {
+export const topic = pgTable('topics', {
   id: text('id')
     .primaryKey()
     .$defaultFn(() => createId()),
   name: text('name').notNull(),
   matterId: text('matter_id').notNull().references(() => matter.id),
-  classroomId: text('classroom_id').notNull().references(() => classroom.id),
   createdAt: timestamp('created_at', { withTimezone: true })
     .notNull()
     .defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true })
     .notNull()
     .defaultNow(),
-}, table => ({
-  uniqueByMatterAndClassroom: unique('questions_matter_id_classroom_id_unique')
-    .on(table.matterId, table.classroomId),
-}))
+})
+
+export const questionLevel = pgEnum('question_level', [
+  'easy',
+  'medium',
+  'hard',
+])
+
+export const questionType = pgEnum('question_type', [
+  'multiple-choice',
+  'true-or-false',
+  'free-text',
+])
+
+export const question = pgTable('questions', {
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => createId()),
+  name: text('name').notNull(),
+  level: questionLevel('level').notNull(),
+  type: questionType('type').notNull(),
+  topicId: text('topic_id').notNull().references(() => topic.id),
+  options: json('options').$type<{
+    value: string
+    label: string
+    correct: boolean
+  }[]>(),
+  createdAt: timestamp('created_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+})
 
 export const answer = pgTable('answers', {
   id: text('id')

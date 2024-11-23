@@ -15,6 +15,13 @@
       "when": 1732339037111,
       "tag": "0001_tranquil_martin_li",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1732370177389,
+      "tag": "0002_woozy_otto_octavius",
+      "breakpoints": true
     }
   ]
 }
