@@ -17,14 +17,15 @@ export function Header() {
         <a href="#" className="text-blue-500">
           Contact
         </a>
+
+        <SignedOut>
+          <SignInButton />
+        </SignedOut>
+        <SignedIn>
+          <UserButton />
+        </SignedIn>
       </div>
 
-      <SignedOut>
-        <SignInButton />
-      </SignedOut>
-      <SignedIn>
-        <UserButton />
-      </SignedIn>
     </header>
   )
 }
