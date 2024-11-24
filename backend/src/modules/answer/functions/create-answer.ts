@@ -72,6 +72,30 @@ export async function createAnswer(request: AnswerRequest): Promise<AnswerRespon
     corrects: 0,
     score: 0,
   })
+  const [rankingUser] = await db
+    .select({
+      id: tables.ranking.userId,
+      score: tables.ranking.score,
+    })
+    .from(tables.ranking)
+    .where(eq(tables.ranking.userId, user.id))
+    .execute()
+  if (rankingUser) {
+    await db
+      .update(tables.ranking)
+      .set({ score: rankingUser.score + report.score })
+      .where(eq(tables.ranking.userId, user.id))
+      .execute()
+  }
+  else {
+    await db
+      .insert(tables.ranking)
+      .values({
+        userId: user.id,
+        score: report.score,
+      })
+      .execute()
+  }
 
   return answerResponseSchema.parse({
     ...report,

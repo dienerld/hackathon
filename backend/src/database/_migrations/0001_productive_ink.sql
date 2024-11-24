@@ -1,0 +1,1 @@
+ALTER TABLE "rankings" ADD CONSTRAINT "rankings_user_id_unique" UNIQUE("user_id");

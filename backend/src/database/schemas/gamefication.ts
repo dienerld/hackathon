@@ -6,7 +6,7 @@ export const ranking = pgTable('rankings', {
   id: text('id')
     .primaryKey()
     .$defaultFn(() => createId()),
-  userId: text('user_id').notNull().references(() => user.id),
+  userId: text('user_id').notNull().references(() => user.id).unique(),
   score: integer('score').notNull(),
   createdAt: timestamp('created_at', { withTimezone: true })
     .notNull()
