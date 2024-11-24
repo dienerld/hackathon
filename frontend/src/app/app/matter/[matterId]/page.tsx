@@ -1,7 +1,6 @@
-import type { Topic } from "./entities/topic";
-import { useBreadcrumbs } from "@/contexts/breadcrumbs/useBreadcrumb";
-import { notFound } from "next/navigation";
-import { TopicCard } from "./components/TopicCard";
+import type { Topic } from './entities/topic'
+import { notFound } from 'next/navigation'
+import { TopicCard } from './components/TopicCard'
 
 interface MatterParams {
   matterId: string;
