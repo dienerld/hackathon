@@ -10,13 +10,7 @@ export const findAllResponseSchema = z.object({
   name: z.string(),
   type: z.string(),
   level: z.string(),
-  options: z.array(
-    z.object({
-      value: z.string(),
-      label: z.string(),
-      correct: z.boolean(),
-    }),
-  ),
+  options: z.any(),
   createAt: z.date(),
 })
 
