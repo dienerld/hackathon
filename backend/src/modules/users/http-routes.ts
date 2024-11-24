@@ -4,36 +4,19 @@ import { verifyToken } from '~/http/middleware/verify-token'
 import { createUser, getUser, userFilterSchema } from './functions'
 
 const createUserSchema = z.object({
-  fullName: z.string(),
   firstName: z.string(),
   lastName: z.string(),
   email: z.string().email(),
   externalId: z.string(),
-  picture: z.string().optional(),
+  classroomId: z.string(),
 })
 
 export const routes: FastifyPluginAsyncZod = async (app) => {
   app.post(
     '',
-    {
-      onRequest: [verifyToken],
-      schema: {
-        body: createUserSchema,
-      },
-    },
+    { schema: { body: createUserSchema } },
     async (request, reply) => {
-      const { fullName, firstName, externalId, email, lastName, picture }
-        = request.body
-
-      const response = await createUser({
-        fullName,
-        firstName,
-        lastName,
-        email,
-        externalId,
-        picture,
-      })
-
+      const response = await createUser(request.body)
       return reply.status(response.newUser ? 201 : 200).send(response)
     },
   )
