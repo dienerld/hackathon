@@ -28,7 +28,7 @@ export function Header({ routes, useDrawer = true }: HeaderProps) {
   const configVisible = useDrawer ? 'hidden md:flex' : 'flex'
 
   return (
-    <header className="flex w-full lg:w-2/3 mx-auto items-center justify-between p-5">
+    <header className="flex w-full max-w-screen-xl mx-auto items-center justify-between p-5">
       <div className="flex items-center gap-5">
         <h1 className="text-2xl font-bold">Hackathon</h1>
       </div>

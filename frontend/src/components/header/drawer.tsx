@@ -1,4 +1,4 @@
-import { SignedIn, UserButton } from '@clerk/nextjs'
+import { SignedIn, useClerk, UserButton } from '@clerk/nextjs'
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -16,11 +16,18 @@ interface NavDrawerProps {
   setDrawerOpen: (open: boolean) => void
 }
 export function NavDrawer({ routes, drawerOpen, setDrawerOpen }: NavDrawerProps) {
+  const { openUserProfile, signOut } = useClerk()
   const path = usePathname()
 
   function isActive(href: string) {
     return path === href
   }
+
+  function handleClickClerk(cb: () => void) {
+    setDrawerOpen(false)
+    cb()
+  }
+
   return (
     <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
       <DrawerContent className="flex flex-col gap-2">
@@ -38,9 +45,15 @@ export function NavDrawer({ routes, drawerOpen, setDrawerOpen }: NavDrawerProps)
           ))}
         </ul>
         <hr />
-        <div className="mx-auto">
+        <div className="mx-auto flex gap-2 ">
           <SignedIn>
-            <UserButton />
+            <Button size="default" onClick={() => handleClickClerk(openUserProfile)}>
+              Perfil
+            </Button>
+            <Button size="default" onClick={() => handleClickClerk(signOut)}>
+              Logout
+            </Button>
+
           </SignedIn>
         </div>
         <DrawerFooter className="w-1/2 mx-auto">

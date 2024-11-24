@@ -1,6 +1,17 @@
 import type { Question, QuestionSelected } from '@/app/app/matter/[matterId]/entities/question'
 
-export async function getQuestionsByTopic(topicId: string): Promise<Question[]> {
+interface ResponseQuestionsByTopic {
+  data: {
+    className: string
+    matterName: string
+    topicName: string
+    questions: Question[]
+  }
+  error: {
+    message: string
+  } | null
+}
+export async function getQuestionsByTopic(topicId: string): Promise<ResponseQuestionsByTopic> {
   try {
     const res = await fetch(`http://localhost:8080/questions?topicId=${topicId}`)
 
@@ -10,7 +21,7 @@ export async function getQuestionsByTopic(topicId: string): Promise<Question[]> 
 
     const json = await res.json()
 
-    return json
+    return { data: json, error: null }
   }
   catch (error) {
     console.error(error)

@@ -11,6 +11,7 @@
   "dependencies": {
     "@clerk/elements": "0.19.7",
     "@clerk/nextjs": "^6.5.0",
+    "@radix-ui/react-checkbox": "^1.1.2",
     "@radix-ui/react-dialog": "^1.1.2",
     "@radix-ui/react-label": "^2.1.0",
     "@radix-ui/react-progress": "^1.1.0",
