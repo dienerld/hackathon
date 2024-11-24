@@ -29,6 +29,13 @@
       "when": 1732377809442,
       "tag": "0003_bright_wallflower",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1732417876636,
+      "tag": "0004_graceful_mantis",
+      "breakpoints": true
     }
   ]
 }
