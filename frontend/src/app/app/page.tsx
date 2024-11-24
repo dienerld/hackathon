@@ -3,12 +3,13 @@
 import type { MatterTypes } from '@/types'
 import { CardClass } from '@/components/CardClass'
 import { DialogRegister } from '@/components/DialogRegister'
-import { getMattersByClassrom } from '@/services/matter.service'
+import { getMatters } from '@/services/matter.service'
+import { useUser } from '@clerk/nextjs'
 import { redirect } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 export default function App() {
-  const user = JSON.parse(localStorage.getItem('user')!)
+  const { user } = useUser()
   const [alert, setAlert] = useState(false)
   const [data, setData] = useState<MatterTypes[]>([])
 
@@ -23,7 +24,7 @@ export default function App() {
     if (!user)
       return
 
-    getMattersByClassrom(user.classroomId).then((res) => {
+    getMatters(user.id).then((res) => {
       if (res.error) {
         return
       }
