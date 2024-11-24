@@ -20,7 +20,7 @@ export async function getQuestionsByTopic(topicId: string): Promise<Question[]> 
 
 export async function saveQuestionsAnswer(questionSelected: { answers: QuestionSelected[], externalId: string }): Promise<void> {
   try {
-    const res = await fetch('http://localhost:8080/answer', {
+    const res = await fetch('http://localhost:8080/answers', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -2,9 +2,8 @@ import z from 'zod'
 import { db, eq, tables } from '~/database'
 
 export const answerRequestSchema = z.object({
-  answer: z.array(z.object({
+  answers: z.array(z.object({
     questionId: z.string(),
-    userId: z.string(),
     selectedOption: z.any(),
   })),
   externalId: z.string(),
@@ -31,7 +30,7 @@ export async function createAnswer(request: AnswerRequest): Promise<AnswerRespon
     .limit(1)
     .execute()
 
-  const answers = request.answer.map(answer => ({
+  const answers = request.answers.map(answer => ({
     ...answer,
     userId: user.id,
   }))

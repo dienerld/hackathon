@@ -1,8 +1,9 @@
-import { db, tables } from '@database/index'
+import type { SQL } from 'drizzle-orm'
+import { and, db, eq, tables } from '@database/index'
 import z from 'zod'
 
 export const findAllFiltersSchema = z.object({
-  questionId: z.string().optional(),
+  topicId: z.string(),
 })
 
 export const findAllResponseSchema = z.object({
@@ -14,9 +15,12 @@ export const findAllResponseSchema = z.object({
   createAt: z.date(),
 })
 
+export type FindAllFilters = z.infer<typeof findAllFiltersSchema>
 export type FindAllResponse = z.infer<typeof findAllResponseSchema>
 
-export async function findAll(): Promise<FindAllResponse[]> {
+export async function findAll(filters: FindAllFilters): Promise<FindAllResponse[]> {
+  const filtersSQL: SQL[] = [eq(tables.question.topicId, filters.topicId)]
+
   const questions = await db
     .select({
       id: tables.question.id,
@@ -27,6 +31,7 @@ export async function findAll(): Promise<FindAllResponse[]> {
       createAt: tables.question.createdAt,
     })
     .from(tables.question)
+    .where(and(...filtersSQL))
     .execute()
 
   return findAllResponseSchema.array().parse(questions)

@@ -9,8 +9,8 @@ export const routes: FastifyPluginAsyncZod = async (app) => {
         querystring: findAllFiltersSchema,
       },
     },
-    async (_, reply) => {
-      const response = await findAll()
+    async (request, reply) => {
+      const response = await findAll(request.query)
       return reply.status(200).send(response)
     },
   )
