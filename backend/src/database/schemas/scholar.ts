@@ -20,6 +20,7 @@ export const matter = pgTable('matters', {
     .primaryKey()
     .$defaultFn(() => createId()),
   name: text('name').notNull(),
+  classroomId: text('classroom_id').notNull().references(() => classroom.id),
   createdAt: timestamp('created_at', { withTimezone: true })
     .notNull()
     .defaultNow(),
