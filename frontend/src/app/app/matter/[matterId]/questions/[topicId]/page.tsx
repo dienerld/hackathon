@@ -44,7 +44,7 @@ export default function Questions() {
     if (!optionSelected)
       return
 
-    // Temporario
+    // Temporário - fazer contornos das opções
     if (optionSelected.selectedOption.correct) {
       toast({
         title: 'Resposta correta!',
@@ -52,7 +52,7 @@ export default function Questions() {
       })
     }
     else {
-      toast({ title: 'Resposta incorreta!' })
+      toast({ title: 'Resposta incorreta!', variant: 'destructive' })
     }
 
     setOptionsSelected([...optionsSelected, optionSelected])
@@ -114,16 +114,8 @@ export default function Questions() {
         {questions.length && currentQuestion < questions.length
           ? (
               <div className="w-full mb-4 text-center">
-                <h2 className="text-xl font-bold">
-                  {metadataQuestions.className}
-                  {' '}
-                  /
-                  {' '}
-                  {metadataQuestions.matterName}
-                  {' '}
-                  /
-                  {' '}
-                  {metadataQuestions.topicName}
+                <h2 className="text-lg font-bold">
+                  {`${metadataQuestions.topicName} - ${metadataQuestions.matterName} - ${metadataQuestions.className}`}
                 </h2>
                 <SliderConclusion to={questions.length} current={currentQuestion} />
                 <div className="flex flex-col gap-2 mt-4">
@@ -131,7 +123,7 @@ export default function Questions() {
 
                   <Title
                     topic="Perguntas"
-                    description="Uma pergunta é um problema que você quer resolver, e a resposta é a solução para o problema."
+                    description={questions[currentQuestion]?.name}
                     level={questions[currentQuestion]?.level}
                     className="text-pretty font-semibold"
                   />
