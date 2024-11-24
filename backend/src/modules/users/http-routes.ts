@@ -17,7 +17,7 @@ export const routes: FastifyPluginAsyncZod = async (app) => {
     { schema: { body: createUserSchema } },
     async (request, reply) => {
       const response = await createUser(request.body)
-      return reply.status(response.newUser ? 201 : 400).send(response)
+      return reply.status(200).send(response)
     },
   )
 
