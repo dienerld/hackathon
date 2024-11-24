@@ -4,7 +4,7 @@ import z from 'zod'
 import { db, tables } from '~/database'
 
 export const findAllFiltersSchema = z.object({
-  classroomId: z.string().optional(),
+  externalId: z.string(),
 })
 
 export const findAllResponseSchema = z.object({
@@ -17,11 +17,7 @@ export type FindAllFilters = z.infer<typeof findAllFiltersSchema>
 export type FindAllResponse = z.infer<typeof findAllResponseSchema>
 
 export async function findAll(filters: FindAllFilters): Promise<FindAllResponse[]> {
-  const filtersSQL: SQL[] = []
-
-  if (filters.classroomId) {
-    filtersSQL.push(eq(tables.matter.classroomId, filters.classroomId))
-  }
+  const filtersSQL: SQL[] = [eq(tables.user.externalId, filters.externalId)]
 
   const matters = await db
     .select({
@@ -30,8 +26,11 @@ export async function findAll(filters: FindAllFilters): Promise<FindAllResponse[
       createdAt: tables.matter.createdAt,
     })
     .from(tables.matter)
+    .innerJoin(tables.user, eq(tables.matter.classroomId, tables.user.classroomId))
     .where(and(...filtersSQL))
     .execute()
+
+  console.log(matters)
 
   return findAllResponseSchema.array().parse(matters)
 }
