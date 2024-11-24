@@ -2,14 +2,16 @@
 
 import type { Question, QuestionSelected } from '../../entities/question'
 import { DialogQuestion } from '@/components/DialogQuestion'
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/hooks/use-toast'
-import { cn } from '@/lib/utils'
 import { getQuestionsByTopic, saveQuestionsAnswer } from '@/services/question.service'
 import { useUser } from '@clerk/nextjs'
 import { redirect, useParams, usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { Badge } from './components/question/Badge'
+import { Option } from './components/question/Option'
+import { Title } from './components/question/Title'
+import { SliderConclusion } from './components/SliderConclusion'
 
 export default function Questions() {
   const pathname = usePathname()
@@ -19,6 +21,11 @@ export default function Questions() {
 
   const [open, setOpen] = useState(false)
   const [currentQuestion, setCurrentQuestion] = useState(0)
+  const [metadataQuestions, setMetadataQuestion] = useState({
+    className: '',
+    matterName: '',
+    topicName: '',
+  })
   const [questions, setQuestions] = useState<Question[]>([])
   const [optionSelected, setOptionSelected] = useState<QuestionSelected>()
   const [optionsSelected, setOptionsSelected] = useState<QuestionSelected[]>([])
@@ -29,8 +36,8 @@ export default function Questions() {
     score: 0,
   })
 
-  function handleSelectOption({ selectedOption }: Omit<QuestionSelected, 'questionId'>) {
-    setOptionSelected({ questionId: questions[currentQuestion].id, selectedOption })
+  function handleSelectOption(option: QuestionSelected['selectedOption']) {
+    setOptionSelected({ questionId: questions[currentQuestion].id, selectedOption: option })
   }
 
   function handleNextQuestion() {
@@ -66,7 +73,14 @@ export default function Questions() {
     }
 
     getQuestionsByTopic(topicId as string).then((res) => {
-      setQuestions(res)
+      console.log(res)
+
+      setQuestions(res.data.questions)
+      setMetadataQuestion({
+        className: res.data.className,
+        matterName: res.data.matterName,
+        topicName: res.data.topicName,
+      })
     })
   }, [topicId])
 
@@ -93,59 +107,44 @@ export default function Questions() {
     }, 1000)
   }, [currentQuestion, questions])
 
-  const parseLevel = {
-    easy: 'Fácil',
-    medium: 'Médio',
-    hard: 'Difícil',
-  }
-
-  function getColor(level: Question['level']) {
-    switch (level) {
-      case 'easy':
-        return 'bg-green-500 text-white'
-      case 'medium':
-        return 'bg-yellow-500 text-white'
-      case 'hard':
-        return 'bg-red-500 text-white'
-      default:
-        return 'bg-gray-500 text-white'
-    }
-  }
-
   return (
     <div className="flex flex-1 h-full flex-col items-center">
       <h1 className="text-4xl font-bold text-center">Perguntas</h1>
       <div className="w-full h-full flex flex-col justify-center items-center flex-1">
         {questions.length && currentQuestion < questions.length
           ? (
-              <div>
-                <span>
-                  {currentQuestion + 1}
+              <div className="w-full mb-4 text-center">
+                <h2 className="text-xl font-bold">
+                  {metadataQuestions.className}
+                  {' '}
                   /
-                  {questions.length}
-                </span>
-
-                <h2>
-                  {questions[currentQuestion]?.name}
-                  <Badge
-                    variant="outline"
-                    className={cn('ml-2', 'text-base', getColor(questions[currentQuestion]?.level))}
-                  >
-                    {parseLevel[questions[currentQuestion]?.level]}
-                  </Badge>
-
+                  {' '}
+                  {metadataQuestions.matterName}
+                  {' '}
+                  /
+                  {' '}
+                  {metadataQuestions.topicName}
                 </h2>
+                <SliderConclusion to={questions.length} current={currentQuestion} />
+                <div className="flex flex-col gap-2 mt-4">
+                  <Badge level={questions[currentQuestion]?.level} />
+
+                  <Title
+                    topic="Perguntas"
+                    description="Uma pergunta é um problema que você quer resolver, e a resposta é a solução para o problema."
+                    level={questions[currentQuestion]?.level}
+                    className="text-pretty font-semibold"
+                  />
+                </div>
 
                 <div className="flex flex-col gap-2 my-4">
                   {questions[currentQuestion]?.options.map(option => (
-                    <div key={option.value}>
-                      <Button
-                        variant={optionSelected?.selectedOption.value === option.value ? 'default' : 'outline'}
-                        onClick={() => handleSelectOption({ selectedOption: option })}
-                      >
-                        {option.label}
-                      </Button>
-                    </div>
+                    <Option
+                      key={option.value}
+                      option={option}
+                      onClick={handleSelectOption}
+                      checked={optionSelected?.selectedOption.value === option.value}
+                    />
                   ))}
                 </div>
 
