@@ -17,6 +17,7 @@ export default function App() {
     if (!id) {
       setAlert(!alert)
     }
+
     redirect(`/app/matter/${id}`)
   }
 

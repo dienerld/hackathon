@@ -75,6 +75,8 @@ export const question = pgTable('questions', {
     .notNull()
     .defaultNow(),
 })
+export type QuestionInsert = typeof question.$inferInsert
+export type Question = typeof question.$inferSelect
 
 export const answer = pgTable('answers', {
   id: text('id')
