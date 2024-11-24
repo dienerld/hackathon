@@ -2,8 +2,10 @@
 
 import type { Question, QuestionSelected } from '../../entities/question'
 import { DialogQuestion } from '@/components/DialogQuestion'
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/hooks/use-toast'
+import { cn } from '@/lib/utils'
 import { getQuestionsByTopic, saveQuestionsAnswer } from '@/services/question.service'
 import { useUser } from '@clerk/nextjs'
 import { redirect, useParams, usePathname } from 'next/navigation'
@@ -91,6 +93,25 @@ export default function Questions() {
     }, 1000)
   }, [currentQuestion, questions])
 
+  const parseLevel = {
+    easy: 'Fácil',
+    medium: 'Médio',
+    hard: 'Difícil',
+  }
+
+  function getColor(level: Question['level']) {
+    switch (level) {
+      case 'easy':
+        return 'bg-green-500 text-white'
+      case 'medium':
+        return 'bg-yellow-500 text-white'
+      case 'hard':
+        return 'bg-red-500 text-white'
+      default:
+        return 'bg-gray-500 text-white'
+    }
+  }
+
   return (
     <div className="flex flex-1 h-full flex-col items-center">
       <h1 className="text-4xl font-bold text-center">Perguntas</h1>
@@ -104,7 +125,16 @@ export default function Questions() {
                   {questions.length}
                 </span>
 
-                <h2>{questions[currentQuestion]?.name}</h2>
+                <h2>
+                  {questions[currentQuestion]?.name}
+                  <Badge
+                    variant="outline"
+                    className={cn('ml-2', 'text-base', getColor(questions[currentQuestion]?.level))}
+                  >
+                    {parseLevel[questions[currentQuestion]?.level]}
+                  </Badge>
+
+                </h2>
 
                 <div className="flex flex-col gap-2 my-4">
                   {questions[currentQuestion]?.options.map(option => (

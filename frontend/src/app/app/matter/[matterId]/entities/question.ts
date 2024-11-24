@@ -8,6 +8,7 @@ export interface Question {
   id: string
   name: string
   topicId: string
+  level: 'easy' | 'medium' | 'hard'
   options: Option[]
 }
 export interface QuestionSelected {
