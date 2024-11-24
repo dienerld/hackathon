@@ -1,4 +1,4 @@
-import type { Question } from '@/app/app/matter/[matterId]/entities/question'
+import type { Question, QuestionSelected } from '@/app/app/matter/[matterId]/entities/question'
 
 export async function getQuestionsByTopic(topicId: string): Promise<Question[]> {
   try {
@@ -11,6 +11,26 @@ export async function getQuestionsByTopic(topicId: string): Promise<Question[]> 
     const json = await res.json()
 
     return json
+  }
+  catch (error) {
+    console.error(error)
+    throw error
+  }
+}
+
+export async function saveQuestionsAnswer(questionSelected: { questions: QuestionSelected[], externalId: string }): Promise<void> {
+  try {
+    const res = await fetch('http://localhost:8080/answer', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(questionSelected),
+    })
+
+    if (!res.ok) {
+      throw new Error('Failed to save questions')
+    }
   }
   catch (error) {
     console.error(error)

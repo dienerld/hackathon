@@ -1,25 +1,19 @@
 'use client'
 
-import type { Question } from '../../entities/question'
+import type { Question, QuestionSelected } from '../../entities/question'
+import { DialogQuestion } from '@/components/DialogQuestion'
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/hooks/use-toast'
-import { getQuestionsByTopic } from '@/services/question.service'
-import { useParams } from 'next/navigation'
+import { getQuestionsByTopic, saveQuestionsAnswer } from '@/services/question.service'
+import { redirect, useParams, usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
-interface QuestionSelected {
-  questionId: string
-  selectedOption: {
-    label: string
-    value: string
-    correct: boolean
-  }
-}
-
 export default function Questions() {
+  const pathname = usePathname()
   const { topicId } = useParams()
   const { toast } = useToast()
 
+  const [open, setOpen] = useState(false)
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [questions, setQuestions] = useState<Question[]>([])
   const [optionSelected, setOptionSelected] = useState<QuestionSelected>()
@@ -44,9 +38,16 @@ export default function Questions() {
       toast({ title: 'Resposta incorreta!' })
     }
 
-    setCurrentQuestion(currentQuestion + 1)
     setOptionsSelected([...optionsSelected, optionSelected])
     setOptionSelected(undefined)
+    setCurrentQuestion(currentQuestion + 1)
+  }
+
+  function handleClose() {
+    setCurrentQuestion(0)
+    setOptionsSelected([])
+    setOpen(false)
+    redirect(pathname.replace(/\/questions\/.*/, ''))
   }
 
   useEffect(() => {
@@ -59,18 +60,39 @@ export default function Questions() {
     })
   }, [topicId])
 
+  useEffect(() => {
+    if (currentQuestion === 0 || currentQuestion < questions.length)
+      return
+
+    saveQuestionsAnswer({ questions: optionsSelected, externalId: topicId as string }).then(() => {
+      toast({
+        title: 'Respostas salvas!',
+        description: 'Suas respostas foram salvas com sucesso!',
+      })
+    })
+
+    setTimeout(() => {
+      setOpen(true)
+    }, 1000)
+  }, [currentQuestion, questions])
+
   return (
     <div className="flex flex-1 h-full flex-col items-center">
       <h1 className="text-4xl font-bold text-center">Perguntas</h1>
-
       <div className="w-full h-full flex flex-col justify-center items-center flex-1">
-        {questions.length
+        {questions.length && currentQuestion < questions.length
           ? (
               <div>
-                <h2>{questions[currentQuestion].name}</h2>
+                <span>
+                  {currentQuestion + 1}
+                  /
+                  {questions.length}
+                </span>
+
+                <h2>{questions[currentQuestion]?.name}</h2>
 
                 <div className="flex flex-col gap-2 my-4">
-                  {questions[currentQuestion].options.map(option => (
+                  {questions[currentQuestion]?.options.map(option => (
                     <div key={option.value}>
                       <Button
                         variant={optionSelected?.selectedOption.value === option.value ? 'default' : 'outline'}
@@ -84,9 +106,9 @@ export default function Questions() {
 
                 <Button
                   onClick={handleNextQuestion}
-                  disabled={currentQuestion === questions.length - 1 || !optionSelected}
+                  disabled={!optionSelected || currentQuestion + 1 === questions.length + 1}
                 >
-                  Proximo
+                  Próxima
                 </Button>
               </div>
             )
@@ -94,6 +116,7 @@ export default function Questions() {
               <div>Loading...</div>
             )}
       </div>
+      <DialogQuestion open={open} onClose={handleClose} />
     </div>
   )
 }
