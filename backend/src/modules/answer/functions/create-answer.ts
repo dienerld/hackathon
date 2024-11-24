@@ -1,26 +1,35 @@
+import { inArray } from 'drizzle-orm'
 import z from 'zod'
 import { db, eq, tables } from '~/database'
 
 export const answerRequestSchema = z.object({
   answers: z.array(z.object({
     questionId: z.string(),
-    selectedOption: z.any(),
+    selectedOption: z.object({
+      label: z.string(),
+      value: z.string(),
+      correct: z.coerce.boolean(),
+    }),
   })),
   externalId: z.string(),
 })
 
 export const answerResponseSchema = z.object({
-  id: z.string(),
-  questionId: z.string(),
-  userId: z.string(),
-  selectedOption: z.any(),
-  createdAt: z.date(),
+  total: z.number(),
+  corrects: z.number(),
+  score: z.number(),
 })
 
 export type AnswerRequest = z.infer<typeof answerRequestSchema>
 export type AnswerResponse = z.infer<typeof answerResponseSchema>
 
-export async function createAnswer(request: AnswerRequest): Promise<AnswerResponse[]> {
+const scoreValues = {
+  easy: 3,
+  medium: 5,
+  hard: 8,
+}
+
+export async function createAnswer(request: AnswerRequest): Promise<AnswerResponse> {
   const [user] = await db
     .select({
       id: tables.user.id,
@@ -35,17 +44,37 @@ export async function createAnswer(request: AnswerRequest): Promise<AnswerRespon
     userId: user.id,
   }))
 
-  const answersCreated = await db
+  await db
     .insert(tables.answer)
     .values(answers)
-    .returning({
-      id: tables.answer.id,
-      questionId: tables.answer.questionId,
-      userId: tables.answer.userId,
-      selectedOption: tables.answer.selectedOption,
-      createdAt: tables.answer.createdAt,
-    })
     .execute()
 
-  return answerResponseSchema.array().parse(answersCreated)
+  const questions = await db
+    .select({
+      id: tables.question.id,
+      level: tables.question.level,
+    })
+    .from(tables.question)
+    .where(inArray(tables.question.id, answers.map(answer => answer.questionId)))
+    .execute()
+
+  const report = answers.reduce((acc, answer) => {
+    const question = questions.find(question => question.id === answer.questionId && answer.selectedOption.correct)
+
+    if (!question)
+      return acc
+
+    return {
+      corrects: acc.corrects + 1,
+      score: acc.score + scoreValues[question.level],
+    }
+  }, {
+    corrects: 0,
+    score: 0,
+  })
+
+  return answerResponseSchema.parse({
+    ...report,
+    total: questions.length,
+  })
 }
