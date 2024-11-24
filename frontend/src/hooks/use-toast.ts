@@ -1,3 +1,4 @@
+/* eslint-disable unused-imports/no-unused-vars */
 'use client'
 
 // Inspired by react-hot-toast library
