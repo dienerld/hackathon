@@ -1,5 +1,4 @@
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
-import { verifyToken } from '~/http/middleware/verify-token'
 import { findAll, findAllFiltersSchema } from './functions'
 
 export const routes: FastifyPluginAsyncZod = async (app) => {
