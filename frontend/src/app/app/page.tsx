@@ -4,6 +4,7 @@ import { CardClass } from "@/components/CardClass";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
+import { DialogRegister } from "@/components/DialogRegister";
 
 export default function App() {
   const [id, setId] = useState("");
@@ -57,6 +58,7 @@ export default function App() {
         ))}
       </div>
       {/* <DialogRegister /> */}
+      <DialogRegister />
     </div>
   );
 }

@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unstable-context-value */
 'use client'
 import { type PropsWithChildren, useState } from 'react'
 import { BreadcrumbContext } from './useBreadcrumb'
