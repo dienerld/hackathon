@@ -18,7 +18,7 @@ export async function getQuestionsByTopic(topicId: string): Promise<Question[]> 
   }
 }
 
-export async function saveQuestionsAnswer(questionSelected: { questions: QuestionSelected[], externalId: string }): Promise<void> {
+export async function saveQuestionsAnswer(questionSelected: { answers: QuestionSelected[], externalId: string }): Promise<void> {
   try {
     const res = await fetch('http://localhost:8080/answer', {
       method: 'POST',

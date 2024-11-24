@@ -5,12 +5,14 @@ import { DialogQuestion } from '@/components/DialogQuestion'
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/hooks/use-toast'
 import { getQuestionsByTopic, saveQuestionsAnswer } from '@/services/question.service'
+import { useUser } from '@clerk/nextjs'
 import { redirect, useParams, usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 export default function Questions() {
   const pathname = usePathname()
   const { topicId } = useParams()
+  const { user } = useUser()
   const { toast } = useToast()
 
   const [open, setOpen] = useState(false)
@@ -64,7 +66,7 @@ export default function Questions() {
     if (currentQuestion === 0 || currentQuestion < questions.length)
       return
 
-    saveQuestionsAnswer({ questions: optionsSelected, externalId: topicId as string }).then(() => {
+    saveQuestionsAnswer({ answers: optionsSelected, externalId: user!.id }).then(() => {
       toast({
         title: 'Respostas salvas!',
         description: 'Suas respostas foram salvas com sucesso!',
