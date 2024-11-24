@@ -34,7 +34,6 @@ export default function Redirect() {
         redirect('/app?first_login=true')
       }
 
-      localStorage.setItem('user', JSON.stringify(res.data))
       redirect('/app')
     })
   }, [user.user])

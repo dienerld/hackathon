@@ -47,7 +47,7 @@ export function DialogRegister() {
         title: 'Cadastro completo',
         description: 'Seu cadastro foi completado com sucesso',
       })
-      localStorage.setItem('user', JSON.stringify(res.data))
+
       redirect('/app')
     })
   }
