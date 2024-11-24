@@ -20,6 +20,12 @@ export default function Questions() {
   const [questions, setQuestions] = useState<Question[]>([])
   const [optionSelected, setOptionSelected] = useState<QuestionSelected>()
   const [optionsSelected, setOptionsSelected] = useState<QuestionSelected[]>([])
+  const [report, setReport] = useState({
+    loading: false,
+    total: 0,
+    corrects: 0,
+    score: 0,
+  })
 
   function handleSelectOption({ selectedOption }: Omit<QuestionSelected, 'questionId'>) {
     setOptionSelected({ questionId: questions[currentQuestion].id, selectedOption })
@@ -66,7 +72,14 @@ export default function Questions() {
     if (currentQuestion === 0 || currentQuestion < questions.length)
       return
 
-    saveQuestionsAnswer({ answers: optionsSelected, externalId: user!.id }).then(() => {
+    setReport(prev => ({ ...prev, loading: true }))
+
+    saveQuestionsAnswer({ answers: optionsSelected, externalId: user!.id }).then((res) => {
+      setReport({
+        ...res,
+        loading: false,
+      })
+
       toast({
         title: 'Respostas salvas!',
         description: 'Suas respostas foram salvas com sucesso!',
@@ -118,7 +131,7 @@ export default function Questions() {
               <div>Loading...</div>
             )}
       </div>
-      <DialogQuestion open={open} onClose={handleClose} />
+      <DialogQuestion open={open} onClose={handleClose} report={report} />
     </div>
   )
 }

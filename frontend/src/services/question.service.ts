@@ -18,7 +18,7 @@ export async function getQuestionsByTopic(topicId: string): Promise<Question[]> 
   }
 }
 
-export async function saveQuestionsAnswer(questionSelected: { answers: QuestionSelected[], externalId: string }): Promise<void> {
+export async function saveQuestionsAnswer(questionSelected: { answers: QuestionSelected[], externalId: string }) {
   try {
     const res = await fetch('http://localhost:8080/answers', {
       method: 'POST',
@@ -27,10 +27,13 @@ export async function saveQuestionsAnswer(questionSelected: { answers: QuestionS
       },
       body: JSON.stringify(questionSelected),
     })
+    const json = await res.json()
 
     if (!res.ok) {
-      throw new Error('Failed to save questions')
+      throw new Error('Failed to save answers')
     }
+
+    return json
   }
   catch (error) {
     console.error(error)

@@ -4,9 +4,15 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 interface DialogQuestionProps {
   open: boolean
   onClose: () => void
+  report: {
+    loading: boolean
+    total: number
+    corrects: number
+    score: number
+  }
 }
 
-export function DialogQuestion({ open, onClose }: DialogQuestionProps) {
+export function DialogQuestion({ open, onClose, report }: DialogQuestionProps) {
   return (
     <Dialog
       open={open}
@@ -16,7 +22,27 @@ export function DialogQuestion({ open, onClose }: DialogQuestionProps) {
         <DialogHeader>
           <DialogTitle className="text-center text-2xl">Parabéns</DialogTitle>
         </DialogHeader>
-        <h2 className="text-center">Exibir score</h2>
+
+        {report.loading
+          ? (
+              <p>Loading...</p>
+            )
+          : (
+              <>
+                <h2 className="text-center">
+                  Total:
+                  {report.total}
+                </h2>
+                <h2 className="text-center">
+                  Acertos:
+                  {report.corrects}
+                </h2>
+                <h2 className="text-center">
+                  Pontuação:
+                  {report.score}
+                </h2>
+              </>
+            )}
 
         <Button onClick={onClose}>Ok</Button>
       </DialogContent>
