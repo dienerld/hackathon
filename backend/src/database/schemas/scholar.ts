@@ -20,6 +20,7 @@ export const matter = pgTable('matters', {
     .primaryKey()
     .$defaultFn(() => createId()),
   name: text('name').notNull(),
+  classId: text('class_id').notNull().references(() => classroom.id),
   createdAt: timestamp('created_at', { withTimezone: true })
     .notNull()
     .defaultNow(),
@@ -74,6 +75,8 @@ export const question = pgTable('questions', {
     .notNull()
     .defaultNow(),
 })
+export type QuestionInsert = typeof question.$inferInsert
+export type Question = typeof question.$inferSelect
 
 export const answer = pgTable('answers', {
   id: text('id')
