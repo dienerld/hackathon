@@ -1,10 +1,9 @@
 import type { PropsWithChildren } from 'react'
-import { Header } from '@/components/header'
 import { MainContent } from '@/components/MainContent'
 import { currentUser } from '@clerk/nextjs/server'
 import { redirect } from 'next/navigation'
 
-export default async function AppLayout({ children }: PropsWithChildren) {
+export default async function AuthLayout({ children }: PropsWithChildren) {
   const user = await currentUser()
 
   if (user) {
@@ -12,8 +11,8 @@ export default async function AppLayout({ children }: PropsWithChildren) {
   }
 
   return (
-    <MainContent lp header={<Header routes={[]} useDrawer={false} />}>
+    <div className="w-full h-full ">
       {children}
-    </MainContent>
+    </div>
   )
 }

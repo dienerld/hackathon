@@ -3,28 +3,24 @@
 import * as Clerk from '@clerk/elements/common'
 import * as SignIn from '@clerk/elements/sign-in'
 import { useClerk } from '@clerk/nextjs'
-import { useRouter } from 'next/navigation'
+import AuthLayout from '../layout'
 
 export default function SignInPage() {
-  const router = useRouter()
   const clerk = useClerk()
 
   const handleGoogleSignIn = async () => {
     try {
-      const session = await clerk.openSignIn({ forceRedirectUrl: '/redirect', signUpForceRedirectUrl: '/redirect', signUpUrl: '/sign-up' })
-
-      console.log(session)
-
-      if (session) {
-        router.push('/redirect') // Segurança extra: redireciona localmente se o Clerk não o fizer
-      }
+      await clerk.openSignIn({ forceRedirectUrl: '/redirect', signUpForceRedirectUrl: '/redirect', signUpUrl: '/sign-up' })
     }
     catch (error) {
       console.error('Erro ao fazer login com Google:', error)
     }
   }
   return (
-    <div className="grid h-full w-full flex-grow items-center  px-4 sm:justify-center">
+
+    <div
+      className="grid h-full w-full flex-grow items-center  px-4 sm:justify-center"
+    >
       <SignIn.Root>
         <SignIn.Step
           name="start"
@@ -75,5 +71,6 @@ export default function SignInPage() {
         </SignIn.Step>
       </SignIn.Root>
     </div>
+
   )
 }
