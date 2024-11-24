@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
-import { Header } from '@/components/Header'
-import { MainContent } from '@/components/MainContent'
+
 import { Toaster } from '@/components/ui/toaster'
 import { ClerkProvider } from '@clerk/nextjs'
 import './globals.css'
@@ -21,9 +20,7 @@ export default function RootLayout({
         <body
           className="antialiased  min-h-svh flex flex-col"
         >
-          <MainContent header={<Header />}>
-            {children}
-          </MainContent>
+          {children}
           <Toaster />
         </body>
       </html>

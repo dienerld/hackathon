@@ -4,10 +4,18 @@ import { LucideMenu } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
-import { NavDrawer } from './header/drawer'
-import { Button } from './ui/button'
+import { Button } from '../ui/button'
+import { NavDrawer } from './drawer'
 
-export function Header() {
+export interface Route {
+  name: string
+  href: string
+}
+
+interface HeaderProps {
+  routes: Route[]
+}
+export function Header({ routes }: HeaderProps) {
   const path = usePathname()
 
   function isActive(href: string) {
@@ -15,12 +23,6 @@ export function Header() {
   }
 
   const [drawerOpen, setDrawerOpen] = useState(false)
-  const routes = [
-    { name: 'Inicio', href: '/' },
-    { name: 'Matérias', href: '/app/matter' },
-    { name: 'Classificação', href: '/app/ranking' },
-    { name: 'Amigos', href: '/app/friends' },
-  ]
 
   return (
     <header className="flex w-full lg:w-2/3 mx-auto items-center justify-between p-5">
