@@ -13,6 +13,7 @@ export const userResponseSchema = z.object({
   firstName: z.string(),
   lastName: z.string(),
   email: z.string(),
+  classroomId: z.string().nullable(),
   createdAt: z.coerce.date(),
 })
 
@@ -26,6 +27,7 @@ export async function getUser(externalId: string): Promise<UserResponse | null> 
       lastName: tables.user.lastName,
       email: tables.user.email,
       externalId: tables.user.externalId,
+      classroomId: tables.user.classroomId,
       createdAt: tables.user.createdAt,
     })
     .from(tables.user)
@@ -36,7 +38,6 @@ export async function getUser(externalId: string): Promise<UserResponse | null> 
     )
     .execute()
 
-  await new Promise(resolve => setTimeout(resolve, 1_000))
   if (!userDb)
     return null
 
