@@ -1,17 +1,19 @@
 'use client'
 
+import { useToast } from '@/hooks/use-toast'
 import { cn } from '@/lib/utils'
 import { getClassrooms } from '@/services/classroom.service'
 import { registerUser } from '@/services/user.service'
 import { useUser } from '@clerk/nextjs'
-import { useSearchParams } from 'next/navigation'
-import { useEffect, useRef, useState } from 'react'
+import { redirect, useSearchParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
 import { Button } from '../ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '../ui/dialog'
 import { Input } from '../ui/input'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
 
 export function DialogRegister() {
+  const { toast } = useToast()
   const { user } = useUser()
   const searchParams = useSearchParams()
   const isFirstLogin = searchParams.get('first_login') === 'true'
@@ -33,7 +35,19 @@ export function DialogRegister() {
     }
 
     registerUser(data).then((res) => {
-      console.log(res)
+      if (res.error) {
+        toast({
+          title: 'Erro ao completar cadastro',
+          description: 'Ocorreu um erro ao completar seu cadastro, tente novamente',
+        })
+        return
+      }
+
+      toast({
+        title: 'Cadastro completo',
+        description: 'Seu cadastro foi completado com sucesso',
+      })
+      redirect('/app')
     })
   }
 
