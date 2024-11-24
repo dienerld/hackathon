@@ -19,10 +19,11 @@ interface SeedByClassroom {
 
 function generateQuestions(count: number, prefix = '') {
   const questions: typeof tables.question.$inferInsert[] = []
-  const random = Math.floor(Math.random() * 3)
-  const randomLevel = Math.floor(Math.random() * 3)
 
   for (let i = 0; i < count; i++) {
+    const random = Math.floor(Math.random() * 3)
+    const randomLevel = Math.floor(Math.random() * 3)
+
     questions.push({
       level: randomLevel === 0 ? 'easy' : randomLevel === 1 ? 'medium' : 'hard',
       type: 'multiple-choice',
@@ -47,17 +48,17 @@ const seedByClassroom: SeedByClassroom[] = [
         name: 'Português',
         id: '',
         topics: [
-          { name: 'Gêneros Textuais', id: '', questions: generateQuestions(10, 'Gêneros') },
-          { name: 'Gramática', id: '', questions: generateQuestions(10, 'Gramática') },
+          { name: 'Gêneros Textuais', id: '', questions: generateQuestions(30, 'Gêneros') },
+          { name: 'Gramática', id: '', questions: generateQuestions(30, 'Gramática') },
         ],
       },
       {
         name: 'História',
         id: '',
         topics: [
-          { name: 'A Formação do Território Brasileiro', id: '', questions: generateQuestions(10) },
-          { name: 'O Período de Colonização', id: '', questions: generateQuestions(10) },
-          { name: 'A Escravidão no Brasil', id: '', questions: generateQuestions(10, 'Escravidão Brasil') },
+          { name: 'A Formação do Território Brasileiro', id: '', questions: generateQuestions(30) },
+          { name: 'O Período de Colonização', id: '', questions: generateQuestions(30) },
+          { name: 'A Escravidão no Brasil', id: '', questions: generateQuestions(30, 'Escravidão Brasil') },
         ],
       },
     ],
@@ -70,18 +71,18 @@ const seedByClassroom: SeedByClassroom[] = [
         name: 'Português',
         id: '',
         topics: [
-          { name: 'Classes Gramaticais', id: '', questions: generateQuestions(10) },
-          { name: 'Gramática Geral', id: '', questions: generateQuestions(10, 'Gramática') },
-          { name: 'Tipos de Texto', id: '', questions: generateQuestions(10, 'Tipos de Texto') },
+          { name: 'Classes Gramaticais', id: '', questions: generateQuestions(30) },
+          { name: 'Gramática Geral', id: '', questions: generateQuestions(30, 'Gramática') },
+          { name: 'Tipos de Texto', id: '', questions: generateQuestions(30, 'Tipos de Texto') },
         ],
       },
       {
         name: 'História',
         id: '',
         topics: [
-          { name: 'Civilizações Antigas', id: '', questions: generateQuestions(10, 'Civilizações Antigas') },
-          { name: 'Grécia Antiga', id: '', questions: generateQuestions(10, 'Grécia Antiga') },
-          { name: 'Idade Média', id: '', questions: generateQuestions(10, 'Idade Média') },
+          { name: 'Civilizações Antigas', id: '', questions: generateQuestions(30, 'Civilizações Antigas') },
+          { name: 'Grécia Antiga', id: '', questions: generateQuestions(30, 'Grécia Antiga') },
+          { name: 'Idade Média', id: '', questions: generateQuestions(30, 'Idade Média') },
         ],
       },
     ],
@@ -136,8 +137,8 @@ async function main() {
     await db.delete(tables.question).execute()
     await db.delete(tables.topic).execute()
     await db.delete(tables.matter).execute()
-    await db.delete(tables.classroom).execute()
     await db.delete(tables.user).execute()
+    await db.delete(tables.classroom).execute()
     console.log('Truncated!')
   }
 

@@ -1,5 +1,5 @@
 import type { SQL } from 'drizzle-orm'
-import { and, db, eq, tables } from '@database/index'
+import { and, db, eq, sql, tables } from '@database/index'
 import z from 'zod'
 
 export const findAllFiltersSchema = z.object({
@@ -32,6 +32,8 @@ export async function findAll(filters: FindAllFilters): Promise<FindAllResponse[
     })
     .from(tables.question)
     .where(and(...filtersSQL))
+    .orderBy(sql`RANDOM()`)
+    .limit(10)
     .execute()
 
   return findAllResponseSchema.array().parse(questions)
