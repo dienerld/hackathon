@@ -16,7 +16,7 @@ export default async function Topics({
   const filters = new URLSearchParams()
   filters.append('matterId', matterId)
   const data = await fetch(
-    `http://backend:8080/topics?${filters.toString()}`,
+    `http://localhost:8080/topics?${filters.toString()}`,
   )
   if (!data.ok) {
     notFound()
