@@ -10,11 +10,7 @@ export default function Redirect() {
   const user = useUser();
 
   async function fetchData() {
-    console.log(user.user);
-
-    const res = await fetch(
-      `http://localhost:8080/users/${user.user?.externalId}`
-    );
+    const res = await fetch(`http://localhost:8080/users/${user.user?.id}`);
 
     const json = await res.json();
     if (!res.ok) {
