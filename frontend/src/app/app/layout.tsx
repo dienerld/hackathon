@@ -8,7 +8,6 @@ export default async function AppLayout({ children }: PropsWithChildren) {
   const user = await currentUser()
   const routes = [
     { name: 'Inicio', href: '/app' },
-    { name: 'Matérias', href: '/app/matter' },
     { name: 'Classificação', href: '/app/ranking' },
     { name: 'Amigos', href: '/app/friends' },
   ]
