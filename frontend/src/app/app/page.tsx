@@ -1,28 +1,42 @@
 "use client";
+import { MatterTypes } from "@/types";
 import { CardClass } from "@/components/CardClass";
-import { DialogRegister } from "@/components/DialogRegister";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { useState } from "react";
-
-const matter = [
-  { name: "Matter 1", description: "Lorem ipsum dolor sit amet" },
-  { name: "Matter 2", description: "Consectetur adipiscing elit" },
-  { name: "Matter 3", description: "Donec id consectetur metus" },
-  { name: "Matter 4", description: "Donec id consectetur metus" },
-  { name: "Matter 5", description: "Donec id consectetur metus" },
-  { name: "Matter 6", description: "Donec id consectetur metus" },
-];
+import { redirect } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function App() {
+  const [id, setId] = useState("");
   const [alert, setAlert] = useState(false);
+  const [data, setData] = useState<MatterTypes[]>([
+    {
+      id: "",
+      name: "",
+      description: "",
+    },
+  ]);
+
+  useEffect(() => {
+    async function data() {
+      const response = await fetch(`http://localhost:8080/matters`);
+      const json = await response.json();
+
+      setData(json);
+    }
+
+    data();
+  }, []);
+
   function handleMatter(id: string) {
-    if (id) {
+    if (!id) {
       setAlert(!alert);
     }
+
+    redirect(`/app/matter/${id}`);
   }
   return (
     <div className="flex flex-col items-center justify-center h-full">
-      {alert ? (
+      {id ? (
         <Alert variant="destructive">
           <AlertTitle>Erro</AlertTitle>
           <AlertDescription>
@@ -34,15 +48,15 @@ export default function App() {
       )}
       <h1 className="font-semibold text-3xl">Disciplinas</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 sm:grid-cols-2 gap-4">
-        {matter.map((item) => (
+        {data.map((item) => (
           <CardClass
             classe={item}
-            key={item.name}
-            action={() => handleMatter(item.name)}
+            key={item.id}
+            action={() => handleMatter(item.id)}
           />
         ))}
       </div>
-      <DialogRegister />
+      {/* <DialogRegister /> */}
     </div>
   );
 }

@@ -30,7 +30,7 @@ export default function Redirect() {
   }
   useEffect(() => {
     if (!user.user) {
-      redirect("/app");
+      return;
     }
     fetchData().then((res) => {
       if (res.error) {

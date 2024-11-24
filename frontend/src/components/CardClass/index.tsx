@@ -1,13 +1,13 @@
 "use client";
 
+import type { MatterTypes } from "@/types";
 import { cn } from "@/lib/utils";
+import { useState } from "react";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
-import { ClassTypes } from "@/types";
-import { useState } from "react";
 
 interface CardClassProps {
-  classe?: ClassTypes;
+  classe?: MatterTypes;
   action?: () => void;
 }
 
@@ -22,7 +22,7 @@ export function CardClass({ classe, action }: CardClassProps) {
       </CardContent>
 
       <CardFooter className="flex justify-evenly">
-        <Button onClick={action}>Deploy</Button>
+        <Button onClick={action}>Desafiar</Button>
       </CardFooter>
     </Card>
   );
