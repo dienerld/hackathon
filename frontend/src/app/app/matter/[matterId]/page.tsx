@@ -1,22 +1,23 @@
 import type { Topic } from './entities/topic'
+import { envs } from '@/envs'
 import { notFound } from 'next/navigation'
-import { TopicCard } from './components/TopicCard'
+import { NavigationCard } from '../../components/navigation-card'
 
 interface MatterParams {
   matterId: string
 }
 
-export default async function Topics({
-  params,
-}: {
+interface TopicsProps {
   params: Promise<MatterParams>
-}) {
+}
+
+export default async function Topics({ params }: TopicsProps) {
   const { matterId } = await params
 
   const filters = new URLSearchParams()
   filters.append('matterId', matterId)
   const data = await fetch(
-    `http://localhost:8080/topics?${filters.toString()}`,
+    `${envs.SERVER_API_URL}/topics?${filters.toString()}`,
   )
   if (!data.ok) {
     notFound()
@@ -27,11 +28,15 @@ export default async function Topics({
   return (
     <div className="flex flex-col justify-center">
       <h1 className="text-4xl font-bold text-center">Tópicos</h1>
-      <ul className="list-none list-inside flex flex-col sm:flex-row gap-4 mt-4 ">
+      <nav className="list-none grid grid-cols-1 sm:grid-cols-2 gap-4 mt-5">
         {topics.map(topic => (
-          <TopicCard key={topic.id} topic={topic} />
+          <NavigationCard
+            key={topic.id}
+            item={topic}
+            href={`/app/matter/${topic.matterId}/questions/${topic.id}`}
+          />
         ))}
-      </ul>
+      </nav>
     </div>
   )
 }

@@ -12,7 +12,7 @@ export default async function AppLayout({ children }: PropsWithChildren) {
   }
 
   return (
-    <MainContent header={<Header routes={[]} />}>
+    <MainContent header={<Header routes={[]} useDrawer={false} />}>
       {children}
     </MainContent>
   )

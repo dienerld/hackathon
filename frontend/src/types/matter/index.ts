@@ -1,5 +1,5 @@
-export interface MatterTypes {
-  id: string;
-  name: string;
-  description?: string;
+export interface Matter {
+  id: string
+  name: string
+  description?: string
 }

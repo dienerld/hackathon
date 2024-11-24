@@ -1,50 +1,27 @@
-'use client'
-
-import type { MatterTypes } from '@/types'
-import { CardClass } from '@/components/CardClass'
 import { DialogRegister } from '@/components/DialogRegister'
 import { getMatters } from '@/services/matter.service'
-import { useUser } from '@clerk/nextjs'
-import { redirect } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { currentUser } from '@clerk/nextjs/server'
+import { NavigationCard } from './components/navigation-card'
 
-export default function App() {
-  const { user } = useUser()
-  const [alert, setAlert] = useState(false)
-  const [data, setData] = useState<MatterTypes[]>([])
-
-  function handleMatter(id: string) {
-    if (!id) {
-      setAlert(!alert)
-    }
-
-    redirect(`/app/matter/${id}`)
+export default async function App() {
+  const user = await currentUser()
+  const matters = await getMatters(user?.id)
+  if (matters.error) {
+    return <div>{JSON.stringify(matters.error)}</div>
   }
 
-  useEffect(() => {
-    if (!user)
-      return
-
-    getMatters(user.id).then((res) => {
-      if (res.error) {
-        return
-      }
-      setData(res.data)
-    })
-  }, [user])
-
   return (
-    <div className="flex flex-col items-center justify-center h-full">
+    <div className="flex flex-col h-full">
       <h1 className="font-semibold text-3xl">Disciplinas</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 sm:grid-cols-2 gap-4">
-        {data.map(item => (
-          <CardClass
-            classe={item}
+      <nav className="list-none grid grid-cols-1 sm:grid-cols-2 gap-4 mt-5">
+        {matters?.data?.map(item => (
+          <NavigationCard
+            item={item}
             key={item.id}
-            action={() => handleMatter(item.id)}
+            href={`/app/matter/${item.id}`}
           />
         ))}
-      </div>
+      </nav>
       <DialogRegister />
     </div>
   )
