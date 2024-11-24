@@ -1,8 +1,4 @@
-interface Question {
-  id: string
-  name: string
-  topicId: string
-}
+import type { Question } from '@/app/app/matter/[matterId]/entities/question'
 
 export async function getQuestionsByTopic(topicId: string): Promise<Question[]> {
   try {
@@ -12,7 +8,9 @@ export async function getQuestionsByTopic(topicId: string): Promise<Question[]> 
       throw new Error('Failed to fetch questions')
     }
 
-    return res.json()
+    const json = await res.json()
+
+    return json
   }
   catch (error) {
     console.error(error)
